@@ -33,7 +33,7 @@ final class PasswordAuthentication implements Authentication
     }
   }
 
-  /** @param array<string,mixed>|\ArrayAccess<string,mixed> $storage */
+  /** @param \ArrayAccess<array-key,mixed>|array<array-key,mixed> $storage */
   public function __construct(
     private(set) array|\ArrayAccess &$storage,
     private(set) readonly string $usernameKey = 'username'
@@ -48,7 +48,6 @@ final class PasswordAuthentication implements Authentication
         assert(password_verify($password, $newHash));
         $this->passwordNeedsUpdate = $newHash ?: false;
       }
-      $this->storage = [];
       if (session_status() === PHP_SESSION_ACTIVE) {
         session_regenerate_id(true);
       }
@@ -62,7 +61,6 @@ final class PasswordAuthentication implements Authentication
   public function logout(): void
   {
     $this->username = null;
-    $this->storage = [];
     if (session_status() === PHP_SESSION_ACTIVE) {
       session_destroy();
     }

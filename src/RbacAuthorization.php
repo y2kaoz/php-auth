@@ -36,7 +36,7 @@ final class RbacAuthorization implements RbacAuthorizationInterface
     }
   }
 
-  /** @param array<string,mixed>|\ArrayAccess<string,mixed> $storage */
+  /** @param \ArrayAccess<array-key,mixed>|array<array-key,mixed> $storage */
   public function __construct(
     private(set) array|\ArrayAccess &$storage,
     private(set) Authorization $authorization,
