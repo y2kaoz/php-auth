@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Y2KaoZ\PhpAuth;
 
-use Y2KaoZ\PhpAuth\Interfaces\Authorization;
+use Y2KaoZ\PhpAuth\Authorization;
 use Y2KaoZ\PhpAuth\Interfaces\Role;
 use Y2KaoZ\PhpAuth\Interfaces\RbacAuthorization as RbacAuthorizationInterface;
 
 /** @api */
-final class RbacAuthorization implements RbacAuthorizationInterface
+final class RbacAuthorization extends Authorization implements RbacAuthorizationInterface
 {
   /** @var null|list<Role> */
   public null|array $roles = null {
@@ -27,7 +27,7 @@ final class RbacAuthorization implements RbacAuthorizationInterface
       return $this->roles;
     }
     set(null|array $values) {
-      if($values===null) {
+      if ($values === null) {
         unset($this->storage[$this->roleKey]);
         $this->roles = null;
         return;
@@ -38,10 +38,12 @@ final class RbacAuthorization implements RbacAuthorizationInterface
 
   /** @param \ArrayAccess<array-key,mixed>|array<array-key,mixed> $storage */
   public function __construct(
-    private(set) array|\ArrayAccess &$storage,
-    private(set) Authorization $authorization,
-    private(set) readonly string $roleKey = 'role',
-  ) {}
+    protected(set) array|\ArrayAccess &$storage,
+    protected(set) readonly string $permissionKey = 'permissions',
+    protected(set) readonly string $roleKey = 'role',
+  ) {
+    parent::__construct($storage, $permissionKey);
+  }
 
   #[\Override]
   public function hasRole(string $role): bool
@@ -61,25 +63,5 @@ final class RbacAuthorization implements RbacAuthorizationInterface
   public function hasAnyRoles(array $roles): bool
   {
     return array_any($roles, fn($role) => $this->isGranted($role));
-  }
-
-  #[\Override]
-  public function isGranted(string $permission): bool
-  {
-    return $this->authorization->isGranted($permission);
-  }
-
-  /** @param list<string> $permissions */
-  #[\Override]
-  public function allGranted(array $permissions): bool
-  {
-    return $this->authorization->allGranted($permissions);
-  }
-
-  /** @param list<string> $permissions */
-  #[\Override]
-  public function anyGranted(array $permissions): bool
-  {
-    return $this->authorization->anyGranted($permissions);
   }
 }

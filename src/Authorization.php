@@ -8,7 +8,7 @@ use Y2KaoZ\PhpAuth\Interfaces\Authorization as AuthorizationInterface;
 use Y2KaoZ\PhpAuth\Interfaces\Permission;
 
 /** @api */
-final class Authorization implements AuthorizationInterface
+class Authorization implements AuthorizationInterface
 {
   /** @var null|list<Permission> */
   public null|array $permissions = null {
@@ -37,8 +37,8 @@ final class Authorization implements AuthorizationInterface
 
   /** @param \ArrayAccess<array-key,mixed>|array<array-key,mixed> $storage */
   public function __construct(
-    private(set) array|\ArrayAccess &$storage,
-    private(set) readonly string $permissionKey = 'permissions'
+    protected(set) array|\ArrayAccess &$storage,
+    protected(set) readonly string $permissionKey = 'permissions'
   ) {
   }
 
