@@ -9,11 +9,11 @@ use Y2KaoZ\PhpAuth\Interfaces\Auth as AuthInterface;
 use Y2KaoZ\PhpAuth\Interfaces\Authentication;
 
 /** @api */
-final class Auth implements AuthInterface
+class Auth implements AuthInterface
 {
   public function __construct(
-    private(set) Authentication $authentication,
-    private(set) Authorization $authorization
+    protected(set) Authentication $authentication,
+    protected(set) Authorization $authorization
   ) {}
 
   #[\Override]

@@ -9,11 +9,11 @@ use Y2KaoZ\PhpAuth\Interfaces\RbacAuth as RbacAuthInterface;
 use Y2KaoZ\PhpAuth\Interfaces\Authentication;
 
 /** @api */
-final class RbacAuth implements RbacAuthInterface
+class RbacAuth implements RbacAuthInterface
 {
   public function __construct(
-    private(set) Authentication $authentication,
-    private(set) RbacAuthorization $authorization
+    protected(set) Authentication $authentication,
+    protected(set) RbacAuthorization $authorization
   ) {}
 
   #[\Override]

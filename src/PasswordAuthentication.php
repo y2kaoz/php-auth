@@ -7,14 +7,14 @@ namespace Y2KaoZ\PhpAuth;
 use Y2KaoZ\PhpAuth\Interfaces\Authentication;
 
 /** @api */
-final class PasswordAuthentication implements Authentication
+class PasswordAuthentication implements Authentication
 {
   const string|int|null PasswordAlgorithm = PASSWORD_DEFAULT;
 
   /** @var false|non-falsy-string */
-  private(set) false|string $passwordNeedsUpdate = false;
+  protected(set) false|string $passwordNeedsUpdate = false;
 
-  private(set) null|string $username = null {
+  protected(set) null|string $username = null {
     get {
       if ($this->username === null && isset($this->storage[$this->usernameKey])) {
         $username = $this->storage[$this->usernameKey] ?? null;
@@ -35,8 +35,8 @@ final class PasswordAuthentication implements Authentication
 
   /** @param \ArrayAccess<array-key,mixed>|array<array-key,mixed> $storage */
   public function __construct(
-    private(set) array|\ArrayAccess &$storage,
-    private(set) readonly string $usernameKey = 'username'
+    protected(set) array|\ArrayAccess &$storage,
+    protected(set) readonly string $usernameKey = 'username'
   ) {}
 
   #[\NoDiscard()]
