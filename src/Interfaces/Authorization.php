@@ -7,11 +7,14 @@ namespace Y2KaoZ\PhpAuth\Interfaces;
 /** @api */
 interface Authorization
 {
+  #[\NoDiscard]
   public function isGranted(string $permission): bool;
 
   /** @param list<string> $permissions */
+  #[\NoDiscard]
   public function allGranted(array $permissions): bool;
 
   /** @param list<string> $permissions */
+  #[\NoDiscard]
   public function anyGranted(array $permissions): bool;
 }

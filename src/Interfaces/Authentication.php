@@ -7,5 +7,6 @@ namespace Y2KaoZ\PhpAuth\Interfaces;
 /** @api */
 interface Authentication
 {
+  #[\NoDiscard]
   public function isAuthenticated(): bool;
 }
