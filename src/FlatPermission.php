@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Y2KaoZ\PhpAuth;
 
-use Y2KaoZ\PhpAuth\Interfaces\Permission;
+use Y2KaoZ\PhpAuth\Interfaces\PermissionInterface;
 
-/** @api */
-final class FlatPermission implements Permission, \Stringable
+/** 
+ * @api 
+ */
+final class FlatPermission implements PermissionInterface
 {
   private(set) readonly string $value;
 

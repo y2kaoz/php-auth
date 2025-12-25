@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Y2KaoZ\PhpAuth\Interfaces;
 
-/** @api */
-interface Authorization
+interface AuthorizationInterface
 {
   #[\NoDiscard]
   public function isGranted(string $permission): bool;

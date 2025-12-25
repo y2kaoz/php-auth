@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Y2KaoZ\PhpAuth\Interfaces;
 
-/** @api */
-interface RbacAuthorization extends Authorization
+interface RbacAuthorizationInterface extends AuthorizationInterface
 {
   #[\NoDiscard]
   public function hasRole(string $role): bool;

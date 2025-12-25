@@ -5,30 +5,30 @@ declare(strict_types=1);
 namespace Y2KaoZ\PhpAuth;
 
 use Y2KaoZ\PhpAuth\Authorization;
-use Y2KaoZ\PhpAuth\Interfaces\Permission;
-use Y2KaoZ\PhpAuth\Interfaces\RbacAuthorization as RbacAuthorizationInterface;
-use Y2KaoZ\PhpAuth\Interfaces\Role;
+use Y2KaoZ\PhpAuth\Interfaces\PermissionInterface;
+use Y2KaoZ\PhpAuth\Interfaces\RbacAuthorizationInterface;
+use Y2KaoZ\PhpAuth\Interfaces\RoleInterface;
 
-/** 
+/**
  * @api 
- * @template PermissionT of Permission
- * @template RoleT of Role
+ * @template PermissionT of PermissionInterface
+ * @template RoleT of RoleInterface
  * @extends Authorization<PermissionT>
  */
-final class RbacAuthorization extends Authorization implements RbacAuthorizationInterface
+class RbacAuthorization extends Authorization implements RbacAuthorizationInterface
 {
   /** @var null|list<RoleT> */
   public null|array $roles = null {
     get {
       if (is_null($this->roles) && isset($this->storage[$this->roleKey])) {
-        $roles = [];
+        $list = [];
         if (is_array($this->storage[$this->roleKey] ?? null)) {
-          $roles = array_values(array_filter(
+          $list = array_values(array_filter(
             $this->storage[$this->roleKey],
-            fn($role) => $role instanceof Role
+            fn($role) => $role instanceof RoleInterface
           ));
         }
-        $this->roles = $roles;
+        $this->roles = $list;
       }
       return $this->roles;
     }

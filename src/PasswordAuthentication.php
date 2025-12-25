@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Y2KaoZ\PhpAuth;
 
 use ArrayAccess;
-use Y2KaoZ\PhpAuth\Interfaces\Authentication;
+use Y2KaoZ\PhpAuth\Interfaces\AuthenticationInterface;
 
 /** 
  * @api
  * @template UserT
  */
-class PasswordAuthentication implements Authentication
+class PasswordAuthentication implements AuthenticationInterface
 {
   const string|int|null PasswordAlgorithm = PASSWORD_DEFAULT;
 

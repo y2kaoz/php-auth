@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Y2KaoZ\PhpAuth;
 
-use Y2KaoZ\PhpAuth\Interfaces\Role;
+use Y2KaoZ\PhpAuth\Interfaces\RoleInterface;
 
-/** @api */
-final class FlatRole implements Role, \Stringable
+/** 
+ * @api 
+ */
+final class FlatRole implements RoleInterface
 {
   private(set) readonly string $value;
 

@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace Y2KaoZ\PhpAuth;
 
-use Y2KaoZ\PhpAuth\Interfaces\Authorization;
-use Y2KaoZ\PhpAuth\Interfaces\Auth as AuthInterface;
-use Y2KaoZ\PhpAuth\Interfaces\Authentication;
+use Y2KaoZ\PhpAuth\Interfaces\AuthorizationInterface;
+use Y2KaoZ\PhpAuth\Interfaces\AuthInterface;
+use Y2KaoZ\PhpAuth\Interfaces\AuthenticationInterface;
 
-/** @api */
+/** 
+ * @api 
+ */
 class Auth implements AuthInterface
 {
   public function __construct(
-    protected(set) Authentication $authentication,
-    protected(set) Authorization $authorization
+    protected(set) AuthenticationInterface $authentication,
+    protected(set) AuthorizationInterface $authorization
   ) {}
 
   #[\Override]

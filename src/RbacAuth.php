@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace Y2KaoZ\PhpAuth;
 
-use Y2KaoZ\PhpAuth\Interfaces\RbacAuthorization;
-use Y2KaoZ\PhpAuth\Interfaces\RbacAuth as RbacAuthInterface;
-use Y2KaoZ\PhpAuth\Interfaces\Authentication;
+use Y2KaoZ\PhpAuth\Interfaces\RbacAuthorizationInterface;
+use Y2KaoZ\PhpAuth\Interfaces\RbacAuthInterface;
+use Y2KaoZ\PhpAuth\Interfaces\AuthenticationInterface;
 
-/** @api */
+/** 
+ * @api 
+ */
 class RbacAuth implements RbacAuthInterface
 {
   public function __construct(
-    protected(set) Authentication $authentication,
-    protected(set) RbacAuthorization $authorization
+    protected(set) AuthenticationInterface $authentication,
+    protected(set) RbacAuthorizationInterface $authorization
   ) {}
 
   #[\Override]

@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Y2KaoZ\PhpAuth;
 
-use Y2KaoZ\PhpAuth\Interfaces\Authorization as AuthorizationInterface;
-use Y2KaoZ\PhpAuth\Interfaces\Permission;
+use Y2KaoZ\PhpAuth\Interfaces\AuthorizationInterface;
+use Y2KaoZ\PhpAuth\Interfaces\PermissionInterface;
 
 /** 
  * @api 
- * @template PermissionT of Permission
+ * @template PermissionT of PermissionInterface
  */
 class Authorization implements AuthorizationInterface
 {
@@ -17,14 +17,14 @@ class Authorization implements AuthorizationInterface
   public null|array $permissions = null {
     get {
       if (is_null($this->permissions)) {
-        $permissions = [];
+        $list = [];
         if (is_array($this->storage[$this->permissionKey] ?? null)) {
-          $permissions = array_values(array_filter(
+          $list = array_values(array_filter(
             $this->storage[$this->permissionKey],
-            fn($permission) => !is_null($permission) && $permission instanceof Permission
+            fn($p) => $p instanceof PermissionInterface
           ));
         }
-        $this->permissions = $permissions;
+        $this->permissions = $list;
       }
       return $this->permissions;
     }

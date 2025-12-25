@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Y2KaoZ\PhpAuth\Interfaces;
 
-/** @api */
-interface Authentication
+interface RoleInterface extends \Stringable
 {
   #[\NoDiscard]
-  public function isAuthenticated(): bool;
+  public function matches(string $role): bool;
 }
