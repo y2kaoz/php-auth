@@ -5,18 +5,24 @@ declare(strict_types=1);
 namespace Y2KaoZ\PhpAuth;
 
 use Y2KaoZ\PhpAuth\Authorization;
-use Y2KaoZ\PhpAuth\Interfaces\Role;
+use Y2KaoZ\PhpAuth\Interfaces\Permission;
 use Y2KaoZ\PhpAuth\Interfaces\RbacAuthorization as RbacAuthorizationInterface;
+use Y2KaoZ\PhpAuth\Interfaces\Role;
 
-/** @api */
+/** 
+ * @api 
+ * @template PermissionT of Permission
+ * @template RoleT of Role
+ * @extends Authorization<PermissionT>
+ */
 final class RbacAuthorization extends Authorization implements RbacAuthorizationInterface
 {
-  /** @var null|list<Role> */
+  /** @var null|list<RoleT> */
   public null|array $roles = null {
     get {
       if (is_null($this->roles) && isset($this->storage[$this->roleKey])) {
         $roles = [];
-        if (is_array($this->storage[$this->roleKey])) {
+        if (is_array($this->storage[$this->roleKey] ?? null)) {
           $roles = array_values(array_filter(
             $this->storage[$this->roleKey],
             fn($role) => $role instanceof Role
@@ -39,7 +45,7 @@ final class RbacAuthorization extends Authorization implements RbacAuthorization
   /** @param \ArrayAccess<array-key,mixed>|array<array-key,mixed> $storage */
   public function __construct(
     protected(set) array|\ArrayAccess &$storage,
-    protected(set) readonly string $permissionKey = 'permissions',
+    string $permissionKey = 'permissions',
     protected(set) readonly string $roleKey = 'role',
   ) {
     parent::__construct($storage, $permissionKey);

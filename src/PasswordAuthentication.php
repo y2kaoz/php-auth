@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace Y2KaoZ\PhpAuth;
 
+use ArrayAccess;
 use Y2KaoZ\PhpAuth\Interfaces\Authentication;
 
-/** @api */
+/** 
+ * @api
+ * @template UserT
+ */
 class PasswordAuthentication implements Authentication
 {
   const string|int|null PasswordAlgorithm = PASSWORD_DEFAULT;
@@ -14,33 +18,33 @@ class PasswordAuthentication implements Authentication
   /** @var false|non-falsy-string */
   protected(set) false|string $passwordNeedsUpdate = false;
 
-  protected(set) null|string $username = null {
+  /** @var null|UserT */
+  protected(set) mixed $user = null {
     get {
-      if ($this->username === null && isset($this->storage[$this->usernameKey])) {
-        $username = $this->storage[$this->usernameKey] ?? null;
-        assert(!isset($username) || is_string($username));
-        $this->username = $username;
+      if ($this->user === null && $this->isAuthenticated()) {
+        $this->user = $this->storage[$this->userKey];
       }
-      return $this->username;
+      return $this->user;
     }
-    set(null|string $value) {
+    set(mixed $value) {
       if ($value === null) {
-        unset($this->storage[$this->usernameKey]);
-        $this->username = null;
+        $this->user = null;
+        unset($this->storage[$this->userKey]);
         return;
       }
-      $this->username = $this->storage[$this->usernameKey] = $value;
+      $this->user = $this->storage[$this->userKey] = $value;
     }
   }
 
   /** @param \ArrayAccess<array-key,mixed>|array<array-key,mixed> $storage */
   public function __construct(
     protected(set) array|\ArrayAccess &$storage,
-    protected(set) readonly string $usernameKey = 'username'
+    protected(set) readonly string $userKey = 'user'
   ) {}
 
+  /** @param UserT $user */
   #[\NoDiscard()]
-  public function login(string $username, string $password, string $hash): bool
+  public function login(mixed $user, string $password, string $hash): bool
   {
     if (password_verify($password, $hash)) {
       if (password_needs_rehash($hash, self::PasswordAlgorithm)) {
@@ -51,16 +55,16 @@ class PasswordAuthentication implements Authentication
       if (session_status() === PHP_SESSION_ACTIVE) {
         session_regenerate_id(true);
       }
-      $this->username = $username;
+      $this->user = $user;
       return true;
     }
-    $this->username = null;
+    $this->user = null;
     return false;
   }
 
   public function logout(): void
   {
-    $this->username = null;
+    $this->user = null;
     if (session_status() === PHP_SESSION_ACTIVE) {
       session_destroy();
     }
@@ -69,7 +73,10 @@ class PasswordAuthentication implements Authentication
   #[\Override]
   public function isAuthenticated(): bool
   {
-    return isset($this->storage[$this->usernameKey]);
+    if($this->storage instanceof ArrayAccess) {
+      return $this->storage->offsetExists($this->userKey);
+    }
+    return array_key_exists($this->userKey, $this->storage);
   }
 
   public static function GenerateRandomPassword(int $passwordLength = 16): string
